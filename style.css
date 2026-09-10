@@ -1,22 +1,18 @@
 /* Import Inter font */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+/* GLOBAL */
 body {
   margin: 0;
   font-family: 'Inter', sans-serif;
 
+  /* Soft salon gradient */
   background: linear-gradient(45deg, #fff5f5, #f7d7c4, #f0b9a1, #ffe9e3);
   background-size: 600% 600%;
   animation: bgShift 14s ease infinite;
 }
 
-@keyframes bgShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-}
-
+/* Smooth animated gradient */
 @keyframes bgShift {
   0% { background-position: 0% 50%; }
   25% { background-position: 50% 100%; }
@@ -25,34 +21,47 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* GLOBAL */
-
-/* Fade-in animation for sections */
-section, header, footer {
+/* Canva-style fade + slide reveal */
+.canva-fade {
   opacity: 0;
-  transform: translateY(20px);
-  animation: fadeIn 0.9s ease forwards;
+  transform: translateY(25px);
+  animation: canvaFade 1.2s ease forwards;
 }
 
-@keyframes fadeIn {
-  to {
+@keyframes canvaFade {
+  0% {
+    opacity: 0;
+    transform: translateY(25px);
+  }
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
+/* Soft float animation (breathing motion) */
+.canva-float {
+  animation: floaty 6s ease-in-out infinite;
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 }
 
-@keyframes gradientMove {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+/* Canva parallax hover */
+.canva-parallax:hover {
+  transform: translateY(-8px) scale(1.02);
+  transition: 0.4s ease;
 }
+
+/* Canva glow border */
+.canva-glow {
+  border: 1px solid rgba(255,255,255,0.4);
+  box-shadow: 0 0 18px rgba(255,255,255,0.25);
+}
+
 /* HEADER */
 header {
   background: rgba(20, 20, 20, 0.9);
@@ -60,6 +69,7 @@ header {
   padding: 1.5em 0;
   text-align: center;
   backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
 }
 
 nav {
@@ -73,11 +83,12 @@ nav a {
   color: #fff;
   text-decoration: none;
   font-weight: 500;
-  transition: opacity 0.3s;
+  transition: opacity 0.3s, transform 0.2s;
 }
 
 nav a:hover {
   opacity: 0.6;
+  transform: translateY(-2px);
 }
 
 /* HERO */
@@ -99,12 +110,27 @@ nav a:hover {
 }
 
 /* GLASS CARDS */
-.service, .team-member, .gallery-item {                          
+.service, .team-member, .gallery-item {
   backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.35);
   border-radius: 14px;
   padding: 1.5em;
   box-shadow: 0 8px 20px rgba(0,0,0,0.08);
   transition: transform 0.3s, box-shadow 0.3s;
+}
+
+/* Canva-style scale-in reveal */
+.canva-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  animation: scaleIn 0.9s ease forwards;
+}
+
+@keyframes scaleIn {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .service:hover, .team-member:hover, .gallery-item:hover {
@@ -140,10 +166,38 @@ nav a:hover {
 }
 
 .gallery-item {
+  display: block;
   width: 280px;
   height: 180px;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 14px;
   position: relative;
   overflow: hidden;
+  text-decoration: none;
+}
+
+/* Canva shimmer effect */
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: 0.6s;
+}
+
+.gallery-item:hover::after {
+  top: 100%;
 }
 
 .gallery-item p {
@@ -168,6 +222,7 @@ footer {
   padding: 2em 0;
   margin-top: 3em;
   backdrop-filter: blur(10px);
+  border-top: 1px solid rgba(255,255,255,0.15);
 }
 
 footer a {
@@ -181,17 +236,3 @@ footer a {
 footer a:hover {
   opacity: 1;
 }
-.gallery-item {
-  display: block;
-  width: 280px;
-  height: 180px;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: 14px;
-  position: relative;
-  overflow: hidden;
-  text-decoration: none;
-}
-
-
