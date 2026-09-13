@@ -1,16 +1,579 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Newen Beauty Salon</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newen Beauty Salon</title>
+<style>
+
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+  :root{
+    --pearl: #fbf4f6;
+    --opal: #f1e6f5;
+    --ink: #211526;
+    --ink-soft: #5b4a63;
+    --bloom: #f4568c;
+    --iris: #8b5fe6;
+    --gold: #d9b888;
+    --glass-bg: rgba(255,255,255,0.5);
+    --glass-bg-soft: rgba(255,255,255,0.38);
+    --glass-border: rgba(255,255,255,0.65);
+    --container: 1180px;
+  }
+
+  *{ box-sizing:border-box; }
+
+  html{
+    scroll-behavior:smooth;
+    scroll-padding-top: 88px;
+  }
+
+  body{
+    margin:0;
+    font-family:'Inter', sans-serif;
+    color:var(--ink);
+    background:
+      radial-gradient(1100px 700px at 90% -10%, rgba(139,95,230,0.14), transparent 60%),
+      radial-gradient(900px 600px at -10% 20%, rgba(244,86,140,0.12), transparent 55%),
+      linear-gradient(180deg, var(--pearl), var(--opal));
+    background-attachment: fixed;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  h1,h2,h3{
+    font-family:'Syne', sans-serif;
+    margin:0;
+    color:var(--ink);
+  }
+
+  p{ margin:0; line-height:1.7; color:var(--ink-soft); }
+
+  a{ color:inherit; }
+
+  .fade-in{ /* hook preserved from original markup; visuals handled per-element below */ }
+
+  :focus-visible{
+    outline:2px solid var(--iris);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  .container{
+    max-width:var(--container);
+    margin:0 auto;
+    padding:0 6%;
+  }
+
+  .eyebrow-space{ height:1px; } /* spacer, no label chrome used by design */
+
+  /* ---------------- HEADER / NAV ---------------- */
+
+  .header{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.1em 6%;
+    background:rgba(251,244,246,0.65);
+    backdrop-filter:blur(16px);
+    -webkit-backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(255,255,255,0.5);
+  }
+
+  .logo{
+    font-size:1.3rem;
+    font-weight:700;
+    letter-spacing:-0.01em;
+    background:linear-gradient(100deg, var(--bloom), var(--iris));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  .nav{
+    display:flex;
+    align-items:center;
+    gap:2rem;
+  }
+
+  .nav a{
+    text-decoration:none;
+    font-weight:500;
+    font-size:0.95rem;
+    color:var(--ink);
+    position:relative;
+    padding-bottom:3px;
+  }
+
+  .nav a::after{
+    content:"";
+    position:absolute;
+    left:0; bottom:0;
+    width:0%; height:2px;
+    background:linear-gradient(90deg, var(--bloom), var(--iris));
+    transition:width 0.3s ease;
+  }
+
+  .nav a:hover::after, .nav a:focus-visible::after{ width:100%; }
+
+  .nav-toggle{
+    display:none;
+    width:40px; height:40px;
+    border-radius:50%;
+    border:1px solid rgba(0,0,0,0.1);
+    background:rgba(255,255,255,0.6);
+    cursor:pointer;
+    position:relative;
+  }
+
+  .nav-toggle span, .nav-toggle span::before, .nav-toggle span::after{
+    content:"";
+    position:absolute;
+    left:11px; right:11px;
+    height:2px;
+    background:var(--ink);
+    transition:transform 0.25s ease, opacity 0.25s ease;
+  }
+  .nav-toggle span{ top:19px; }
+  .nav-toggle span::before{ top:-6px; }
+  .nav-toggle span::after{ top:6px; }
+
+  .nav-toggle.open span{ background:transparent; }
+  .nav-toggle.open span::before{ transform:translateY(6px) rotate(45deg); }
+  .nav-toggle.open span::after{ transform:translateY(-6px) rotate(-45deg); }
+
+  /* ---------------- HERO ---------------- */
+
+  #hero{
+    position:relative;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    padding:8em 6% 4em;
+    overflow:hidden;
+  }
+
+  .orb{
+    position:absolute;
+    border-radius:50%;
+    filter:blur(70px);
+    opacity:0.55;
+    pointer-events:none;
+    z-index:0;
+  }
+  .orb-1{
+    width:480px; height:480px;
+    top:-140px; right:-120px;
+    background:radial-gradient(circle at 30% 30%, var(--bloom), transparent 70%);
+    animation:floatOrb1 20s ease-in-out infinite alternate;
+  }
+  .orb-2{
+    width:420px; height:420px;
+    bottom:-160px; left:-100px;
+    background:radial-gradient(circle at 60% 40%, var(--iris), transparent 70%);
+    animation:floatOrb2 24s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatOrb1{
+    0%{ transform:translate(0,0) scale(1); }
+    100%{ transform:translate(-40px, 50px) scale(1.08); }
+  }
+  @keyframes floatOrb2{
+    0%{ transform:translate(0,0) scale(1); }
+    100%{ transform:translate(30px, -40px) scale(1.05); }
+  }
+
+  .hero-content{
+    position:relative;
+    z-index:1;
+    max-width:44rem;
+    opacity:0;
+    transform:translateY(18px);
+    animation:heroReveal 1s ease forwards 0.15s;
+  }
+
+  @keyframes heroReveal{
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  #hero h1{
+    font-size:clamp(2.6rem, 3vw + 2.2rem, 5rem);
+    font-weight:800;
+    line-height:1.04;
+    letter-spacing:-0.02em;
+    background:linear-gradient(100deg, var(--ink) 0%, var(--bloom) 55%, var(--iris) 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+
+  #hero h2{
+    margin-top:1.4rem;
+    font-family:'Inter', sans-serif;
+    font-weight:400;
+    font-size:1.2rem;
+    color:var(--ink-soft);
+    max-width:36ch;
+  }
+
+  /* ---------------- ABOUT ---------------- */
+
+  #about{
+    padding:6em 6%;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:4rem;
+    align-items:start;
+  }
+
+  #about h2{
+    font-size:clamp(1.9rem, 1.2vw + 1.6rem, 2.6rem);
+    margin-bottom:1.2rem;
+  }
+
+  #about p{
+    max-width:56ch;
+    font-size:1.05rem;
+  }
+
+  .about-list{
+    list-style:none;
+    margin:0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:0.9rem;
+  }
+
+  .about-list li{
+    display:flex;
+    align-items:center;
+    gap:0.8rem;
+    padding:0.9rem 1.4rem;
+    background:var(--glass-bg);
+    backdrop-filter:blur(10px);
+    border:1px solid var(--glass-border);
+    border-radius:999px;
+    font-weight:500;
+    font-size:0.98rem;
+    box-shadow:0 8px 24px rgba(139,95,230,0.08);
+  }
+
+  .about-list li::before{
+    content:"";
+    width:9px; height:9px;
+    border-radius:50%;
+    background:linear-gradient(120deg, var(--bloom), var(--iris));
+    flex-shrink:0;
+  }
+
+  /* ---------------- SERVICES ---------------- */
+
+  #services{
+    padding:5em 6% 6em;
+  }
+
+  #services > h2{
+    font-size:clamp(1.9rem, 1.2vw + 1.6rem, 2.6rem);
+    margin-bottom:2.2rem;
+  }
+
+  .services-grid{
+    display:grid;
+    grid-template-columns:repeat(12, 1fr);
+    gap:1.4rem;
+  }
+
+  .service{
+    position:relative;
+    padding:2.1rem 2rem;
+    background:var(--glass-bg-soft);
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+    border:1px solid var(--glass-border);
+    box-shadow:0 10px 30px rgba(33,21,38,0.06);
+    transition:transform 0.35s ease, box-shadow 0.35s ease;
+    overflow:hidden;
+  }
+
+  .service::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:3px;
+  }
+
+  .service:hover{
+    transform:translateY(-6px);
+    box-shadow:0 18px 40px rgba(33,21,38,0.12);
+  }
+
+  .service h3{
+    font-size:1.25rem;
+    margin-bottom:0.6rem;
+  }
+
+  .service p{ font-size:0.98rem; }
+
+  .service:nth-child(1){ grid-column:span 7; border-radius:32px; background:rgba(255,255,255,0.55); }
+  .service:nth-child(1)::before{ background:linear-gradient(90deg, var(--bloom), var(--iris)); }
+
+  .service:nth-child(2){ grid-column:span 5; border-radius:20px; }
+  .service:nth-child(2)::before{ background:linear-gradient(90deg, var(--iris), var(--gold)); }
+
+  .service:nth-child(3){ grid-column:span 4; border-radius:26px; }
+  .service:nth-child(3)::before{ background:linear-gradient(90deg, var(--gold), var(--bloom)); }
+
+  .service:nth-child(4){ grid-column:span 4; border-radius:20px; background:rgba(255,255,255,0.55); }
+  .service:nth-child(4)::before{ background:linear-gradient(90deg, var(--bloom), var(--gold)); }
+
+  .service:nth-child(5){ grid-column:span 4; border-radius:26px; }
+  .service:nth-child(5)::before{ background:linear-gradient(90deg, var(--iris), var(--bloom)); }
+
+  /* ---------------- TEAM ---------------- */
+
+  #team{
+    padding:5em 6% 6em;
+    display:block;
+  }
+
+  #team > h2{
+    font-size:clamp(1.9rem, 1.2vw + 1.6rem, 2.6rem);
+    margin-bottom:2.4rem;
+  }
+
+  .team-grid{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:3rem 3.2rem;
+  }
+
+  .team-member{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    width:160px;
+  }
+
+  .avatar-monogram{
+    width:84px; height:84px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'Syne', sans-serif;
+    font-weight:700;
+    font-size:1.7rem;
+    color:#fff;
+    margin-bottom:1rem;
+  }
+
+  .team-member:nth-child(1) .avatar-monogram{ background:linear-gradient(135deg, var(--bloom), var(--iris)); box-shadow:0 10px 26px rgba(244,86,140,0.35); }
+  .team-member:nth-child(2) .avatar-monogram{ background:linear-gradient(135deg, var(--iris), var(--gold)); box-shadow:0 10px 26px rgba(139,95,230,0.32); }
+  .team-member:nth-child(3) .avatar-monogram{ background:linear-gradient(135deg, var(--gold), var(--bloom)); box-shadow:0 10px 26px rgba(217,184,136,0.4); }
+  .team-member:nth-child(4) .avatar-monogram{ background:linear-gradient(135deg, var(--bloom), var(--iris)); box-shadow:0 10px 26px rgba(139,95,230,0.32); transform:scaleX(-1); }
+  .team-member:nth-child(4) .avatar-monogram span{ transform:scaleX(-1); display:inline-block; }
+
+  .team-member h3{
+    font-size:1.05rem;
+    margin-bottom:0.2rem;
+  }
+
+  .team-member p{
+    font-size:0.9rem;
+    color:var(--ink-soft);
+  }
+
+  /* ---------------- GALLERY ---------------- */
+
+  #gallery{
+    padding:5em 6% 6em;
+  }
+
+  #gallery > h2{
+    font-size:clamp(1.9rem, 1.2vw + 1.6rem, 2.6rem);
+    margin-bottom:2.2rem;
+  }
+
+  .gallery-grid{
+    display:flex;
+    flex-wrap:wrap;
+    gap:1.4rem;
+    justify-content:center;
+  }
+
+  .gallery-item{
+    display:block;
+    width:300px;
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    border-radius:22px;
+    position:relative;
+    overflow:hidden;
+    text-decoration:none;
+    border:6px solid rgba(255,255,255,0.65);
+    box-shadow:0 16px 36px rgba(33,21,38,0.14);
+    transition:transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .gallery-item:nth-child(1){ height:260px; }
+  .gallery-item:nth-child(2){ height:320px; }
+  .gallery-item:nth-child(3){ height:240px; }
+
+  .gallery-item:hover{
+    transform:translateY(-8px);
+    box-shadow:0 24px 48px rgba(33,21,38,0.2);
+  }
+
+  .gallery-item::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(0deg, rgba(33,21,38,0.65) 0%, rgba(33,21,38,0) 45%);
+    opacity:0.75;
+    transition:opacity 0.4s ease;
+  }
+
+  .gallery-item::after{
+    content:"";
+    position:absolute;
+    top:-120%;
+    left:0;
+    width:100%;
+    height:60%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.5), transparent);
+    transform:skewX(-20deg);
+    transition:top 0.7s ease;
+  }
+
+  .gallery-item:hover::after{ top:130%; }
+
+  .gallery-item p{
+    position:absolute;
+    bottom:14px; left:18px; right:18px;
+    color:#fff;
+    font-weight:600;
+    font-size:0.98rem;
+    z-index:1;
+    transform:translateY(6px);
+    opacity:0.9;
+    transition:transform 0.35s ease;
+  }
+
+  .gallery-item:hover p{ transform:translateY(0); }
+
+  /* ---------------- FOOTER ---------------- */
+
+  .footer{
+    position:relative;
+    background:var(--ink);
+    color:#fff;
+    text-align:center;
+    padding:3.2em 6% 2.6em;
+    margin-top:2em;
+  }
+
+  .footer::before{
+    content:"";
+    position:absolute;
+    top:0; left:0; right:0;
+    height:2px;
+    background:linear-gradient(90deg, var(--bloom), var(--iris), var(--gold));
+  }
+
+  .footer p{
+    color:rgba(255,255,255,0.75);
+    margin-bottom:1.2rem;
+    font-size:0.95rem;
+  }
+
+  .footer-links{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:0.9rem;
+  }
+
+  .footer a{
+    text-decoration:none;
+    color:#fff;
+    font-size:0.92rem;
+    font-weight:500;
+    padding:0.65rem 1.4rem;
+    border-radius:999px;
+    border:1px solid rgba(255,255,255,0.25);
+    transition:background 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
+  }
+
+  .footer a:hover{
+    background:linear-gradient(100deg, var(--bloom), var(--iris));
+    border-color:transparent;
+    transform:translateY(-2px);
+  }
+
+  /* ---------------- RESPONSIVE ---------------- */
+
+  @media (max-width: 900px){
+    #about{ grid-template-columns:1fr; gap:2.4rem; }
+    .service:nth-child(1),
+    .service:nth-child(2),
+    .service:nth-child(3),
+    .service:nth-child(4){ grid-column:span 6; }
+    .service:nth-child(5){ grid-column:span 12; }
+  }
+
+  @media (max-width: 700px){
+    .nav{
+      position:absolute;
+      top:100%; left:0; right:0;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:0.4rem;
+      padding:1rem 6% 1.4rem;
+      background:rgba(251,244,246,0.96);
+      backdrop-filter:blur(16px);
+      border-bottom:1px solid rgba(255,255,255,0.5);
+      max-height:0;
+      overflow:hidden;
+      transition:max-height 0.35s ease;
+    }
+    .nav.open{ max-height:320px; }
+    .nav a{ padding:0.5rem 0; width:100%; }
+    .nav-toggle{ display:block; }
+
+    #hero{ padding-top:7em; }
+    #hero h2{ max-width:none; }
+
+    .services-grid{ grid-template-columns:repeat(1, 1fr); }
+    .service:nth-child(1),
+    .service:nth-child(2),
+    .service:nth-child(3),
+    .service:nth-child(4),
+    .service:nth-child(5){ grid-column:span 1; }
+
+    .gallery-item{ width:100%; max-width:380px; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .orb{ animation:none; }
+    .hero-content{ animation:none; opacity:1; transform:none; }
+    *{ transition-duration:0.01ms !important; }
+  }
+
+</style>
 </head>
 
 <body>
   <header class="header">
     <h1 class="logo">Newen Beauty Salon</h1>
-    <nav class="nav">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu" aria-expanded="false"><span></span></button>
+    <nav class="nav" id="mainNav">
       <a href="#hero">Home</a>
       <a href="#about">About</a>
       <a href="#services">Services</a>
@@ -20,6 +583,8 @@
   </header>
 
   <section id="hero" class="hero">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
     <div class="hero-content fade-in">
       <h1>Unlock Your Beauty</h1>
       <h2>Experience the latest in modern beauty and self-care</h2>
@@ -27,9 +592,11 @@
   </section>
 
   <section id="about" class="about fade-in">
-    <h2>About Newen Beauty Salon</h2>
-    <p>Welcome to Newen Beauty Salon, where we believe in modern beauty and self-care. Our team of high quality experts uses
-    the latest techniques to provide personalized care and a relaxing atmosphere to help you feel your best.</p>
+    <div>
+      <h2>About Newen Beauty Salon</h2>
+      <p>Welcome to Newen Beauty Salon, where we believe in modern beauty and self-care. Our team of high quality experts uses
+      the latest techniques to provide personalized care and a relaxing atmosphere to help you feel your best.</p>
+    </div>
     <ul class="about-list">
       <li>Modern techniques</li>
       <li>Relaxing atmosphere</li>
@@ -39,52 +606,89 @@
 
   <section id="services" class="services fade-in">
     <h2>Our Services</h2>
-    <div class="service"><h3>Hair Styling</h3><p>Get the latest trends and styles with our expert hair stylists.</p></div>
-    <div class="service"><h3>Coloring</h3><p>Dye your hair with our professional coloring services.</p></div>
-    <div class="service"><h3>Nails</h3><p>Get your nails done with our experienced nail technicians.</p></div>
-    <div class="service"><h3>Skin Treatments</h3><p>Keep your skin healthy and glowing with our skin treatments.</p></div>
-    <div class="service"><h3>Lashes</h3><p>Enhance your look with our professional lash services.</p></div>
+    <div class="services-grid">
+      <div class="service"><h3>Hair Styling</h3><p>Get the latest trends and styles with our expert hair stylists.</p></div>
+      <div class="service"><h3>Coloring</h3><p>Dye your hair with our professional coloring services.</p></div>
+      <div class="service"><h3>Nails</h3><p>Get your nails done with our experienced nail technicians.</p></div>
+      <div class="service"><h3>Skin Treatments</h3><p>Keep your skin healthy and glowing with our skin treatments.</p></div>
+      <div class="service"><h3>Lashes</h3><p>Enhance your look with our professional lash services.</p></div>
+    </div>
   </section>
 
   <section id="team" class="team fade-in">
     <h2>Our Team</h2>
-    <div class="team-member"><h3>Hannah Nguyen</h3><p>Stylist</p></div>
-    <div class="team-member"><h3>Kathy Nguyen</h3><p>Colorist</p></div>
-    <div class="team-member"><h3>Ruby</h3><p>Nail Technician</p></div>
-    <div class="team-member"><h3>idk</h3><p>Skin Specialist</p></div>
+    <div class="team-grid">
+      <div class="team-member"><h3>Hannah Nguyen</h3><p>Stylist</p></div>
+      <div class="team-member"><h3>Kathy Nguyen</h3><p>Colorist</p></div>
+      <div class="team-member"><h3>Ruby</h3><p>Nail Technician</p></div>
+      <div class="team-member"><h3>idk</h3><p>Skin Specialist</p></div>
+    </div>
   </section>
 
   <section id="gallery" class="gallery fade-in">
     <h2>Gallery</h2>
+    <div class="gallery-grid">
+      <a href="https://s3-media0.fl.yelpcdn.com/bphoto/Ol06_ew8yGdkeURSeDBv9Q/o.jpg"
+         target="_blank"
+         class="gallery-item"
+         style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/Ol06_ew8yGdkeURSeDBv9Q/o.jpg');">
+        <p>Hair Styling</p>
+      </a>
 
-    <a href="https://s3-media0.fl.yelpcdn.com/bphoto/Ol06_ew8yGdkeURSeDBv9Q/o.jpg"
-       target="_blank"
-       class="gallery-item"
-       style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/Ol06_ew8yGdkeURSeDBv9Q/o.jpg');">
-      <p>Hair Styling</p>
-    </a>
+      <a href="https://s3-media0.fl.yelpcdn.com/bphoto/Gv67JvkWF0dgHOaw0crAeQ/348s.jpg"
+         target="_blank"
+         class="gallery-item"
+         style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/Gv67JvkWF0dgHOaw0crAeQ/348s.jpg');">
+        <p>Our Business Card</p>
+      </a>
 
-    <a href="https://s3-media0.fl.yelpcdn.com/bphoto/Gv67JvkWF0dgHOaw0crAeQ/348s.jpg"
-       target="_blank"
-       class="gallery-item"
-       style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/Gv67JvkWF0dgHOaw0crAeQ/348s.jpg');">
-      <p>Our Business Card</p>
-    </a>
-
-    <a href="https://s3-media0.fl.yelpcdn.com/bphoto/iqVD6WFMXMQAV6Bnto1mlg/348s.jpg"
-       target="_blank"
-       class="gallery-item"
-       style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/iqVD6WFMXMQAV6Bnto1mlg/348s.jpg');">
-      <p>Our Shop</p>
-    </a>
+      <a href="https://s3-media0.fl.yelpcdn.com/bphoto/iqVD6WFMXMQAV6Bnto1mlg/348s.jpg"
+         target="_blank"
+         class="gallery-item"
+         style="background-image: url('https://s3-media0.fl.yelpcdn.com/bphoto/iqVD6WFMXMQAV6Bnto1mlg/348s.jpg');">
+        <p>Our Shop</p>
+      </a>
+    </div>
   </section>
 
   <footer class="footer">
     <p>Newen Beauty Salon © 2026</p>
-    <a href="tel:+19095988394">Call Us: (909) 598-8394</a>
-    <a href="https://www.google.com/maps/dir//Newen's+Beauty+Salon,+20747+Amar+Rd+%232,+Walnut,+CA+91789/">Visit Us: 20747 Amar Rd, Walnut, CA</a>
+    <div class="footer-links">
+      <a href="tel:+19095988394">Call Us: (909) 598-8394</a>
+      <a href="https://www.google.com/maps/dir//Newen's+Beauty+Salon,+20747+Amar+Rd+%232,+Walnut,+CA+91789/">Visit Us: 20747 Amar Rd, Walnut, CA</a>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const mainNav = document.getElementById('mainNav');
+    navToggle.addEventListener('click', () => {
+      const isOpen = mainNav.classList.toggle('open');
+      navToggle.classList.toggle('open', isOpen);
+      navToggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+    mainNav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mainNav.classList.remove('open');
+        navToggle.classList.remove('open');
+        navToggle.setAttribute('aria-expanded', 'false');
+      });
+    });
+
+    // Generate monogram avatars for the team from each member's existing name text,
+    // without altering the original name/role content.
+    document.querySelectorAll('.team-member').forEach(member => {
+      const nameEl = member.querySelector('h3');
+      if (!nameEl) return;
+      const initial = nameEl.textContent.trim().charAt(0).toUpperCase();
+      const avatar = document.createElement('div');
+      avatar.className = 'avatar-monogram';
+      const span = document.createElement('span');
+      span.textContent = initial;
+      avatar.appendChild(span);
+      member.insertBefore(avatar, nameEl);
+    });
+  </script>
 </body>
 </html>
